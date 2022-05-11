@@ -1,5 +1,8 @@
+from sqlite3.dbapi2 import Row
+
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 from werkzeug.exceptions import abort
+from werkzeug.wrappers.response import Response
 
 from app.auth import login_required
 from app.db import get_db
@@ -8,7 +11,7 @@ bp = Blueprint("post", __name__)
 
 
 @bp.route("/")
-def index():
+def index() -> str:
     """Handle all requests sent to the root URL and return all existing posts."""
     db = get_db()
     posts = db.execute(
@@ -30,7 +33,7 @@ def index():
 
 @bp.route("/create", methods=("GET", "POST"))
 @login_required
-def create():
+def create() -> Response | str:
     """Allow authenticated users to create new posts."""
     if request.method == "POST":
         title = request.form["title"]
@@ -55,7 +58,7 @@ def create():
     return render_template("post/create.html")
 
 
-def get_post(post_id, check_author=True):
+def get_post(post_id: int, check_author: bool = True) -> Row:
     """Get data for a specified post."""
     post = (
         get_db()
@@ -88,7 +91,7 @@ def get_post(post_id, check_author=True):
 
 @bp.route("/<int:post_id>/update", methods=("GET", "POST"))
 @login_required
-def update(post_id):
+def update(post_id: int) -> Response | str:
     """Allow authenticated users to update an existing post."""
     post = get_post(post_id)
 
@@ -121,7 +124,7 @@ def update(post_id):
 
 @bp.route("/<int:post_id>/delete", methods=("POST",))
 @login_required
-def delete(post_id):
+def delete(post_id: int) -> Response:
     """Allow authenticated users to delete a post"""
     get_post(post_id)
     db = get_db()
