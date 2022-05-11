@@ -32,8 +32,6 @@ def app() -> Flask:
         }
     )
 
-
-
     with app.app_context():
         init_db()
         get_db().executescript(parse_sql_script())
