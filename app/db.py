@@ -5,7 +5,7 @@ from flask import current_app, g
 from flask.cli import with_appcontext
 
 
-def get_db():
+def get_db() -> sqlite3.Connection:
     """Get an existing database session or create a new one."""
     if "db" not in g:
         g.db = sqlite3.connect(
@@ -16,7 +16,7 @@ def get_db():
     return g.db
 
 
-def close_db(e=None):
+def close_db(e=None) -> None:
     """Close an existing database session, if one exists."""
     db = g.pop("db", None)
 
@@ -24,7 +24,7 @@ def close_db(e=None):
         db.close()
 
 
-def init_db():
+def init_db() -> None:
     """Initialize the application database."""
     db = get_db()
 
@@ -34,13 +34,13 @@ def init_db():
 
 @click.command("init-db")
 @with_appcontext
-def init_db_command():
+def init_db_command() -> None:
     """Set up a cli command to allow for users to be able to clear and initialize the application database."""
     init_db()
     click.echo("Initialized the database.")
 
 
-def init_app(app):
+def init_app(app) -> None:
     """Initialize the application."""
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
