@@ -9,8 +9,15 @@ from werkzeug.test import TestResponse
 from app import create_app
 from app.db import get_db, init_db
 
-with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
-    _data_sql = f.read().decode("utf8")
+
+def parse_sql_script() -> str:
+    """Parse the test SQL script and return as a string."""
+    sql_script: str
+
+    with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
+        sql_script = f.read().decode("utf8")
+
+    return sql_script
 
 
 @pytest.fixture
@@ -25,9 +32,11 @@ def app() -> Flask:
         }
     )
 
+
+
     with app.app_context():
         init_db()
-        get_db().executescript(_data_sql)
+        get_db().executescript(parse_sql_script())
 
     yield app
 
