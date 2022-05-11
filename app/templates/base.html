@@ -3,6 +3,7 @@
   <head>
     <title>{% block title %}{% endblock %} - Heavy Metal Machine</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="https://kit.fontawesome.com/abcb054d0c.js" crossorigin="anonymous" defer></script>
   </head>
 
   <nav class="navbar is-light" role="navigation" aria-label="main navigation">
@@ -28,8 +29,13 @@
         <div class="navbar-item">
           <div class="buttons">
             {% if g.user %}
-              <a class="button is-white">
-                {{ g.user["username"] }}
+              <a class="button is-success" href="{{ url_for('post.create') }}">
+                <span class="icon-text">
+                  <span class="icon">
+                    <i class="fa-solid fa-plus"></i>
+                  </span>
+                  <span>Create Post</span>
+                </span>
               </a>
               <a class="button is-danger" href="{{ url_for('auth.logout') }}">
                 Log Out
@@ -39,7 +45,7 @@
                 Sign Up
               </a>
               <a class="button is-light" href="{{ url_for('auth.login') }}">
-                Sign Up
+                Log In
               </a>
             {% endif %}
           </div>
