@@ -1,5 +1,4 @@
-from flask import (Blueprint, flash, g, redirect, render_template, request,
-                   url_for)
+from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 from werkzeug.exceptions import abort
 
 from app.auth import login_required
@@ -8,7 +7,7 @@ from app.db import get_db
 bp = Blueprint("post", __name__)
 
 
-@bp.route('/')
+@bp.route("/")
 def index():
     db = get_db()
     posts = db.execute(
@@ -25,7 +24,7 @@ def index():
         order by p.created desc
         """
     ).fetchall()
-    return render_template('post/index.html', posts=posts)
+    return render_template("post/index.html", posts=posts)
 
 
 @bp.route("/create", methods=("GET", "POST"))
@@ -57,7 +56,8 @@ def create():
 def get_post(post_id, check_author=True):
     post = (
         get_db()
-        .execute("""
+        .execute(
+            """
         select p.id
              , p.title
              , p.body
@@ -68,7 +68,8 @@ def get_post(post_id, check_author=True):
                join users u
                  on u.id = p.author_id
          where p.id = ?
-        """, (post_id,),
+        """,
+            (post_id,),
         )
         .fetchone()
     )
@@ -105,7 +106,8 @@ def update(post_id):
                    set title = ?
                      , body = ?
                  where id = ?
-                 """, (title, body, post_id)
+                 """,
+                (title, body, post_id),
             )
             db.commit()
             return redirect(url_for("post.index"))
