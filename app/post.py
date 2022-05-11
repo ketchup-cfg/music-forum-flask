@@ -9,6 +9,7 @@ bp = Blueprint("post", __name__)
 
 @bp.route("/")
 def index():
+    """Handle all requests sent to the root URL and return all existing posts."""
     db = get_db()
     posts = db.execute(
         """
@@ -30,6 +31,7 @@ def index():
 @bp.route("/create", methods=("GET", "POST"))
 @login_required
 def create():
+    """Allow authenticated users to create new posts."""
     if request.method == "POST":
         title = request.form["title"]
         body = request.form["body"]
@@ -54,6 +56,7 @@ def create():
 
 
 def get_post(post_id, check_author=True):
+    """Get data for a specified post."""
     post = (
         get_db()
         .execute(
@@ -86,6 +89,7 @@ def get_post(post_id, check_author=True):
 @bp.route("/<int:post_id>/update", methods=("GET", "POST"))
 @login_required
 def update(post_id):
+    """Allow authenticated users to update an existing post."""
     post = get_post(post_id)
 
     if request.method == "POST":
@@ -118,6 +122,7 @@ def update(post_id):
 @bp.route("/<int:post_id>/delete", methods=("POST",))
 @login_required
 def delete(post_id):
+    """Allow authenticated users to delete a post"""
     get_post(post_id)
     db = get_db()
     db.execute("delete from posts where id = ?", (post_id,))

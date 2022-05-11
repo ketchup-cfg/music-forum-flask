@@ -8,16 +8,10 @@
 
     <div class="card">
       <div class="card-content">
-        <p class="title has-text-centered">
-          {{ post['title'] }}
-        </p>
-        <p class="subtitle has-text-centered">
-          by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}
-        </p>
+        <p class="title has-text-centered">{{ post['title'] }}</p>
+        <p class="subtitle has-text-centered">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</p>
         <hr>
-        <div class="content">
-          {{ post['body'] }}
-        </div>
+        <div class="content">{{ post['body'] }}</div>
       </div>
       {% if g.user['id'] == post['author_id'] %}
         <footer class="card-footer">
