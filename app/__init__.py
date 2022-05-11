@@ -1,13 +1,12 @@
 import os
+from typing import Any, Mapping
 
 from flask import Flask
 
 
-def create_app(test_config=None):
+def create_app(test_config: Mapping[str, Any] = None) -> Flask:
     """Create and configure the app"""
-    from . import db
-    from . import post
-    from . import auth
+    from . import auth, db, post
 
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -26,6 +25,11 @@ def create_app(test_config=None):
         pass
 
     db.init_app(app)
+
+    # Set up a route that can be used for testing purposes
+    @app.route("/hello")
+    def hello():
+        return "Hello, World!"
 
     # Setup routes
     app.register_blueprint(auth.bp)
