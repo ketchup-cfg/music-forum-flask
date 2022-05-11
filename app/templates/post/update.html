@@ -3,44 +3,37 @@
 {% block title %}{{ request.form['title'] or post['title'] }}{% endblock %}
 
 {% block content %}
-  <div class="column is-three-fifths is-offset-one-fifth">
-    <form method="post">
 
-      <div class="field">
-        <label class="label" for="title">
-          Title
-        </label>
-        <div class="control">
-          <input type="text" name="title" id="title" value="{{ request.form['title'] or post['title'] }}" required>
-        </div>
+  <form method="post">
+    <div class="field">
+      <label class="label" for="title">
+        Title
+      </label>
+      <div class="control">
+        <input type="text" name="title" id="title" value="{{ request.form['title'] or post['title'] }}" required>
       </div>
-
-      <div class="field">
-        <label class="label" for="body">
-          Body
-        </label>
-        <div class="control">
-          <textarea class="textarea" name="body" id="body">
-            {{ request.form['body'] or post['body'] }}
-          </textarea>
-        </div>
+    </div>
+    <div class="field">
+      <label class="label" for="body">
+        Body
+      </label>
+      <div class="control">
+        <textarea class="textarea" name="body" id="body">
+          {{ request.form['body'] or post['body'] }}
+        </textarea>
       </div>
-
-      <div class="field">
-        <p class="control">
-          <input class="button is-success" type="submit" value="Save">
-        </p>
-      </div>
-
-    </form>
-
-    <hr>
-
-    <form action="{{ url_for('post.delete', id=post['id']) }}" method="post">
+    </div>
+    <div class="field">
       <p class="control">
-        <input class="button is-danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+        <input class="button is-success" type="submit" value="Save">
       </p>
-    </form>
-  </div>
+    </div>
+  </form>
+  <hr>
+  <form action="{{ url_for('post.delete', id=post['id']) }}" method="post">
+    <p class="control">
+      <input class="button is-danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+    </p>
+  </form>
 
 {% endblock %}

@@ -6,38 +6,24 @@
 
   {% for post in posts %}
 
-    <div class="column is-three-fifths is-offset-one-fifth">
-
-      <div class="card">
-        <header class="card-header">
-
-
-        </header>
-
-        <div class="card-content">
-          <p class="title has-text-centered">
-            {{ post['title'] }}
-          </p>
-
-          <p class="subtitle has-text-centered">
-            by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}
-          </p>
-
-          <hr>
-
-          <div class="content">
-            {{ post['body'] }}
-          </div>
+    <div class="card">
+      <div class="card-content">
+        <p class="title has-text-centered">
+          {{ post['title'] }}
+        </p>
+        <p class="subtitle has-text-centered">
+          by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}
+        </p>
+        <hr>
+        <div class="content">
+          {{ post['body'] }}
         </div>
-
-        {% if g.user['id'] == post['author_id'] %}
-          <footer class="card-footer">
-            <a class="card-footer-item" href="{{ url_for('post.update', post_id=post['id']) }}">Edit</a>
-          </footer>
-        {% endif %}
-
       </div>
-
+      {% if g.user['id'] == post['author_id'] %}
+        <footer class="card-footer">
+          <a class="card-footer-item" href="{{ url_for('post.update', post_id=post['id']) }}">Edit</a>
+        </footer>
+      {% endif %}
     </div>
 
     {% if not loop.last %}
