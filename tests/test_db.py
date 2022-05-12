@@ -1,10 +1,10 @@
 import sqlite3
 
-import _pytest.monkeypatch
+
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 from flask.app import Flask
-from flask.testing import FlaskClient, FlaskCliRunner
+from flask.testing import FlaskCliRunner
 
 from app.db import get_db
 

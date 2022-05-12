@@ -10,8 +10,8 @@ from app import create_app
 from app.db import get_db, init_db
 
 
-def parse_sql_script() -> str:
-    """Parse the test SQL script and return as a string."""
+def __parse_sql_script() -> str:
+    """Parse the test SQL script and return it as a string."""
     sql_script: str
 
     with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
@@ -34,7 +34,7 @@ def app() -> Flask:
 
     with app.app_context():
         init_db()
-        get_db().executescript(parse_sql_script())
+        get_db().executescript(__parse_sql_script())
 
     yield app
 
@@ -44,15 +44,18 @@ def app() -> Flask:
 
 @pytest.fixture
 def client(app) -> FlaskClient:
+    """Provide a test Flask client for use by test modules."""
     return app.test_client()
 
 
 @pytest.fixture
 def runner(app) -> FlaskCliRunner:
+    """Provide a test Flask cli client for use by test modules."""
     return app.test_cli_runner()
 
 
 class AuthActions(object):
+    """Define the auth actions and responses that the test Flask client can use."""
     def __init__(self, client: FlaskClient):
         self._client = client
 
@@ -67,4 +70,5 @@ class AuthActions(object):
 
 @pytest.fixture
 def auth(client) -> AuthActions:
+    """Provide a Flask client with auth actions defined."""
     return AuthActions(client)
