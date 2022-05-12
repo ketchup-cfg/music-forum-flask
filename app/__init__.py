@@ -6,7 +6,7 @@ from flask import Flask
 
 def create_app(test_config: Mapping[str, Any] = None) -> Flask:
     """Create and configure the app"""
-    from . import auth, db, post
+    from . import auth, db, error, post
 
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -30,6 +30,9 @@ def create_app(test_config: Mapping[str, Any] = None) -> Flask:
     @app.route("/hello")
     def hello():
         return "Hello, World!"
+
+    # Setup error handlers
+    app.register_error_handler(404, error.page_not_found)
 
     # Setup routes
     app.register_blueprint(auth.bp)

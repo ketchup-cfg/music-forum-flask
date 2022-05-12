@@ -56,6 +56,7 @@ def runner(app) -> FlaskCliRunner:
 
 class AuthActions(object):
     """Define the auth actions and responses that the test Flask client can use."""
+
     def __init__(self, client: FlaskClient):
         self._client = client
 

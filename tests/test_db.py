@@ -1,6 +1,5 @@
 import sqlite3
 
-
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 from flask.app import Flask
