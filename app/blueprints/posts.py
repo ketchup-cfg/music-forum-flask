@@ -7,7 +7,7 @@ from werkzeug.wrappers.response import Response
 from app.db import get_db
 from app.fixtures import login_required
 
-bp = Blueprint("post", __name__)
+bp = Blueprint("post", __name__, url_prefix="/posts")
 
 
 @bp.route("/")
@@ -28,7 +28,7 @@ def index() -> str:
         order by p.created desc
         """
     ).fetchall()
-    return render_template("post/index.html", posts=posts)
+    return render_template("posts/index.html", posts=posts)
 
 
 @bp.route("/create", methods=("GET", "POST"))
@@ -55,7 +55,7 @@ def create() -> Response | str:
 
             return redirect(url_for("post.index"))
 
-    return render_template("post/create.html")
+    return render_template("posts/create.html")
 
 
 def get_post(post_id: int, check_author: bool = True) -> Row:
@@ -119,7 +119,7 @@ def update(post_id: int) -> Response | str:
             db.commit()
             return redirect(url_for("post.index"))
 
-    return render_template("post/update.html", post=post)
+    return render_template("posts/update.html", post=post)
 
 
 @bp.route("/<int:post_id>/delete", methods=("POST",))
@@ -130,4 +130,4 @@ def delete(post_id: int) -> Response:
     db = get_db()
     db.execute("delete from posts where id = ?", (post_id,))
     db.commit()
-    return redirect(url_for("post.index"))
+    return redirect(url_for("posts.index"))
