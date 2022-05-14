@@ -15,7 +15,7 @@
       </div>
       {% if g.user['id'] == post['author_id'] %}
         <footer class="card-footer">
-          <a class="card-footer-item" href="{{ url_for('post.update', post_id=post['id']) }}">Edit</a>
+          <a class="card-footer-item" href="{{ url_for('posts.update', post_id=post['id']) }}">Edit</a>
         </footer>
       {% endif %}
     </div>

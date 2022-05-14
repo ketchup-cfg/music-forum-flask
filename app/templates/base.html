@@ -20,7 +20,7 @@
       </div>
       <div id="heavyMetalNavbar" class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item">
+          <a class="navbar-item" href="/">
             Home
           </a>
         </div>
@@ -28,7 +28,7 @@
           <div class="navbar-item">
             <div class="buttons">
               {% if g.user %}
-                <a class="button is-success" href="{{ url_for('post.create') }}">
+                <a class="button is-success" href="{{ url_for('posts.create') }}">
                   <span class="icon-text">
                     <span class="icon">
                       <i class="fa-solid fa-plus"></i>

@@ -7,28 +7,7 @@ from werkzeug.wrappers.response import Response
 from app.db import get_db
 from app.fixtures import login_required
 
-bp = Blueprint("post", __name__, url_prefix="/posts")
-
-
-@bp.route("/")
-def index() -> str:
-    """Handle all requests sent to the root URL and return all existing posts."""
-    db = get_db()
-    posts = db.execute(
-        """
-        select p.id
-             , p.title
-             , p.body
-             , p.created
-             , p.author_id
-             , u.username
-          from posts p
-               join users u
-                 on p.author_id = u.id
-        order by p.created desc
-        """
-    ).fetchall()
-    return render_template("posts/index.html", posts=posts)
+bp = Blueprint("posts", __name__, url_prefix="/posts")
 
 
 @bp.route("/create", methods=("GET", "POST"))
@@ -53,7 +32,7 @@ def create() -> Response | str:
             )
             db.commit()
 
-            return redirect(url_for("post.index"))
+            return redirect(url_for("root.index"))
 
     return render_template("posts/create.html")
 
@@ -117,7 +96,7 @@ def update(post_id: int) -> Response | str:
                 (title, body, post_id),
             )
             db.commit()
-            return redirect(url_for("post.index"))
+            return redirect(url_for("root.index"))
 
     return render_template("posts/update.html", post=post)
 
@@ -130,4 +109,4 @@ def delete(post_id: int) -> Response:
     db = get_db()
     db.execute("delete from posts where id = ?", (post_id,))
     db.commit()
-    return redirect(url_for("posts.index"))
+    return redirect(url_for("root.index"))

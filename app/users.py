@@ -8,7 +8,7 @@ def authenticate_user(username: str, password: str) -> int:
     """Check if the username and password are valid, and if they are, return the user's ID."""
     db = get_db()
     user = db.execute(
-        "select password from users where username = ?", (username,)
+        "select * from users where username = ?", (username,)
     ).fetchone()
 
     if user is None:

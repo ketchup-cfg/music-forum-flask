@@ -3,12 +3,12 @@ from typing import Any, Mapping
 
 from flask import Flask
 
+from app import db, errors
+from app.blueprints import auth, posts, root
+
 
 def create_app(test_config: Mapping[str, Any] = None) -> Flask:
     """Create and configure the app"""
-    from app import db, error
-    from app.blueprints import auth, posts
-
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY="dev",
@@ -33,9 +33,10 @@ def create_app(test_config: Mapping[str, Any] = None) -> Flask:
         return "Hello, World!"
 
     # Setup error handlers
-    app.register_error_handler(404, error.page_not_found)
+    app.register_error_handler(404, errors.page_not_found)
 
     # Setup routes
+    app.register_blueprint(root.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(posts.bp)
     app.add_url_rule("/", endpoint="index")
