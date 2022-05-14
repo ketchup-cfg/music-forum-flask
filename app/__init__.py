@@ -6,7 +6,8 @@ from flask import Flask
 
 def create_app(test_config: Mapping[str, Any] = None) -> Flask:
     """Create and configure the app"""
-    from . import auth, db, error, post
+    from app import db, error, post
+    from app.blueprints import auth
 
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(

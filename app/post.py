@@ -4,8 +4,8 @@ from flask import Blueprint, flash, g, redirect, render_template, request, url_f
 from werkzeug.exceptions import abort
 from werkzeug.wrappers.response import Response
 
-from app.auth import login_required
 from app.db import get_db
+from app.fixtures import login_required
 
 bp = Blueprint("post", __name__)
 

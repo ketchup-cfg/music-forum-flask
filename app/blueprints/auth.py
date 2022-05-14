@@ -1,6 +1,3 @@
-import functools
-from typing import Any, Callable
-
 from flask import (
     Blueprint,
     flash,
@@ -11,10 +8,12 @@ from flask import (
     session,
     url_for,
 )
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash
 from werkzeug.wrappers.response import Response
 
 from app.db import get_db
+from app.exceptions import AuthenticationError
+from app.users import authenticate_user
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -56,25 +55,18 @@ def register() -> Response | str:
 def login() -> Response | str:
     """Authenticate an existing user."""
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        db = get_db()
-        error = None
-        user = db.execute(
-            "select * from users where username = ?", (username,)
-        ).fetchone()
-
-        if user is None:
-            error = "Incorrect username."
-        elif not check_password_hash(user["password"], password):
-            error = "Incorrect password."
-
-        if error is None:
+        try:
+            user_id = authenticate_user(
+                request.form["username"], request.form["password"]
+            )
             session.clear()
-            session["user_id"] = user["id"]
+            session["user_id"] = user_id
+
             return redirect(url_for("index"))
 
-        flash(error)
+        except AuthenticationError as ex:
+            error_message = ex.args[0]
+            flash(error_message)
 
     return render_template("auth/login.html")
 
@@ -97,16 +89,3 @@ def logout() -> Response:
     """Log the user out for the current session."""
     session.clear()
     return redirect(url_for("index"))
-
-
-def login_required(view) -> Callable[[dict[str, Any]], Response | Any]:
-    """A decorator to use for requiring that a user be authenticated when submitting a request."""
-
-    @functools.wraps(view)
-    def wrapped_view(**kwargs) -> Response | Any:
-        if g.user is None:
-            return redirect(url_for("auth.login"))
-
-        return view(**kwargs)
-
-    return wrapped_view
